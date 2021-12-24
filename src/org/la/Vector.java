@@ -59,7 +59,7 @@ public class Vector implements Iterable<Double> {
     }
 
     public Vector add(Vector v) {
-        checkLengths(this, v);
+        checkLengths(v);
 
         VectorIterator it = iterator();
         Vector result = blank(length);
@@ -93,7 +93,7 @@ public class Vector implements Iterable<Double> {
     }
 
     public Vector mul(Vector v) {
-        checkLengths(this, v);
+        checkLengths(v);
 
         VectorIterator it = iterator();
         Vector result = blank(length);
@@ -107,7 +107,7 @@ public class Vector implements Iterable<Double> {
     }
 
     public double dot(Vector v) {
-        checkLengths(this, v);
+        checkLengths(v);
 
         VectorIterator it = iterator();
         double result = 0;
@@ -208,7 +208,7 @@ public class Vector implements Iterable<Double> {
         VectorIterator it = iterator();
         boolean res = true;
 
-        while (it.hasNext()) {
+        while (it.hasNext() && res) {
             double a = it.next();
             double b = v.get(it.index());
             double d = Math.abs(a - b);
@@ -260,8 +260,8 @@ public class Vector implements Iterable<Double> {
         };
     }
 
-    private void checkLengths(Vector v, Vector u) {
-        if (v.length() != u.length())
+    private void checkLengths(Vector v) {
+        if (length != v.length())
             fail("Vectors have different sizes");
     }
     

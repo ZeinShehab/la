@@ -1,131 +1,271 @@
 package org.la;
 
-/**
- * This interface was designed as a template to be implemented by other classes
- * It is not meant to be imported and used
- */
-public interface Vector {
-    /**
-     * Checks if all components of the vector are zero
-     * @return if instance vector is zero or not
-     */
-    boolean isZero();
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 
-    /**
-     * Returns Euclidean norm of the vector
-     * @return euclidean norm
-     */
-    double norm();
+import org.la.iterator.VectorIterator;
+
+public class Vector implements Iterable<Double> {
+    private static final double EPS = Math.pow(10, -6);
+    private double[] v;
+    private int length;
+
+    public Vector(double ... v) {
+        this.length = v.length;
+        this.v = new double[length];
+        System.arraycopy(v, 0, this.v, 0, length);
+    }
+
+    public double get(int index) {
+        return this.v[index];
+    }
+
+    public void set(int index, double value) {
+        this.v[index] = value;
+    }
+
+    public int length() {
+        return length;
+    }
+
+    public boolean isZero() {
+        VectorIterator it = iterator();
+        
+        while (it.hasNext()) {
+            if (it.next() != 0) 
+                return false;
+        }
+        return true;
+    }
+
+    private Vector blank(int size) {
+        return new Vector(new double[size]);
+    }
+
+    public Vector negate() {
+        return mul(-1);
+    }
+
+    public Vector add(double a) {
+        VectorIterator it = iterator();
+        Vector result = blank(length);
+
+        while(it.hasNext()) {
+            double x = it.next();
+            int i = it.index();
+            result.set(i, x + a);
+        }
+        return result;
+    }
+
+    public Vector add(Vector v) {
+        checkLengths(this, v);
+
+        VectorIterator it = iterator();
+        Vector result = blank(length);
+
+        while(it.hasNext()) {
+            double x = it.next();
+            int i = it.index();
+            result.set(i, x + v.get(i));
+        }
+        return result;
+    }
+
+    public Vector sub(double a) {
+        return add(-a);
+    }
+
+    public Vector sub(Vector v) {
+        return add(v.negate());
+    }
+
+    public Vector mul(double a) {
+        VectorIterator it = iterator();
+        Vector result = blank(length);
+
+        while (it.hasNext()) {
+            double x = it.next();
+            int i = it.index();
+            result.set(i, x * a);
+        }
+        return result;
+    }
+
+    public Vector mul(Vector v) {
+        checkLengths(this, v);
+
+        VectorIterator it = iterator();
+        Vector result = blank(length);
+
+        while (it.hasNext()) {
+            double x = it.next();
+            int i = it.index();
+            result.set(i, x * v.get(i));
+        }
+        return result;
+    }
+
+    public double dot(Vector v) {
+        checkLengths(this, v);
+
+        VectorIterator it = iterator();
+        double result = 0;
+
+        while (it.hasNext()) {
+            double x = it.next();
+            int i = it.index();
+            result += x * v.get(i);
+        }
+        return result;
+    }
+
+    public Vector div(double a) {
+        return mul(1.0/a);
+    }
+
+    public double norm() {
+        return euclideanNorm();
+    }
+
+    public double normSq() {
+        double x = norm();
+        return x*x;
+    }
+
+    public double euclideanNorm() {
+        VectorIterator it = iterator();
+        double result = 0;
+
+        while (it.hasNext()) {
+            double x = it.next();
+            result += x*x;
+        }
+        return Math.sqrt(result);
+    }
+
+    public double manhattanNorm() {
+        VectorIterator it = iterator();
+        double result = 0;
+
+        while (it.hasNext()) {
+            result += Math.abs(it.next());
+        }
+        return result;
+    }
+
+    public double infinityNorm() {
+        VectorIterator it = iterator();
+        double result = 0;
+
+        if (it.hasNext())
+            result = it.next();
+
+        while (it.hasNext()) {
+            double x = Math.abs(it.next());
+            if (x > result)
+                result = x;
+        }
+        return result;
+    }
+
+    public double angle(Vector v) {
+        return Math.acos(dot(v) / (norm() * v.norm()));
+    }
+
+    public Vector normalize() {
+        if (isZero()) {
+            fail("Cannot normalize zero vector");
+        }
+        return div(norm());
+    }
+
+    public double[] toArray() {
+        double[] res = new double[length];
+        System.arraycopy(v, 0, res, 0, length);
+        return res;
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(v);
+    } 
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null && obj instanceof Vector)
+            return equals((Vector) obj, EPS);
+        return false;
+    }
+
+    public boolean equals(Vector v, double tolerance) {
+        if (this == v)
+            return true;
+        
+        if (this.length != v.length())
+            return false;
+
+        VectorIterator it = iterator();
+        boolean res = true;
+
+        while (it.hasNext()) {
+            double a = it.next();
+            double b = v.get(it.index());
+            double d = Math.abs(a - b);
+
+            res = (a == b) || (d < tolerance);
+        }       
+        return res;
+    }
+
+    @Override
+    public Vector clone() {
+        double[] res = toArray();
+        return new Vector(res);
+    }
+
+    @Override
+    public VectorIterator iterator() {
+        return new VectorIterator() {
+            private int index = -1;
+
+            @Override
+            public int index() {
+                return index;
+            }
+
+            @Override
+            public double get() {
+                return Vector.this.get(index);
+            }
+
+            @Override
+            public void set(double value) {
+                Vector.this.set(index, value);
+            }
+
+            @Override
+            public boolean hasNext() {
+                return index + 1 < length;
+            }
+
+            @Override
+            public Double next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                index++;
+                return get();
+            }
+        };
+    }
+
+    private void checkLengths(Vector v, Vector u) {
+        if (v.length() != u.length())
+            fail("Vectors have different sizes");
+    }
     
-    /**
-     * Returns the square of the euclidean norm
-     * @return norm squared
-     */
-    double normSq();
-
-    /**
-     * Returns the Taxicab norm
-     * @return taxicab norm
-     */
-    double norm1();
-
-    /**
-     * Infinity norm
-     * @return infinity norm
-     */
-    double normInf();
-
-    /**
-     * Angle in radians between instance and {@code v}
-     * @param v Vector
-     * @return angle between instance and v
-     */
-    double angle(Vector v);
-
-    /**
-     * Dot product of instance and {@code v}
-     * @param v Vector
-     * @return dot product of instance and v
-     */
-    double dot(Vector v);
-
-    /**
-     * Euclidean distance between instance and vector {@code v}
-     * @param v Vector
-     * @return distance between instance and v
-     */
-    double distance(Vector v);
-
-    /**
-     * Euclidean distance between instance and point {@code p}
-     * @param p Point
-     * @return distance between instance and p
-     * @see {@link #distance(Vector)}
-     */
-    double distance(Point p);
-
-    /**
-     * Manhattan distance between instance and vector {@code v}
-     * @param v Vector
-     * @return manhattan distance between instance and v
-     */
-    double distance1(Vector v);
-
-    /**
-     * Square of the distance between instance and vector {@code v}
-     * @param v Vector
-     * @return distance between instance and v sqaured
-     */
-    double distanceSq(Vector v);
-
-    /**
-     * Max difference in distance
-     * @param v Vector
-     * @return max difference
-     */
-    double distanceInf(Vector v);
-
-    /**
-     * sum of instance and given vector as a new Vector
-     * @param v Vector
-     * @return sum of instance and v
-     */
-    Vector add(Vector v);
-
-    /**
-     * difference of instance and given vector as a new Vector
-     * @param v Vector
-     * @return instance minus v
-     */
-    Vector sub(Vector v);
-
-    /**
-     * returns instance multiplied by value as new Vector
-     * @param a a value
-     * @return instance times a
-     */
-    Vector scale(double a);
-
-    /**
-     * returns the negation of instance as new Vector
-     * @return -instance
-     */
-    Vector negate();
-
-    /**
-     * returns normalized Vector of instance
-     * @return instance normalized
-     * @throws ArithmeticException
-     */
-    Vector normalize() throws ArithmeticException;
-
-    /**
-     * Returns conventional string representation of instance
-     * @return string of instance
-     */
-    String toString();
-
-    static void fail(String message) {
+    private void fail(String message) {
         throw new IllegalArgumentException(message);
     }
 }

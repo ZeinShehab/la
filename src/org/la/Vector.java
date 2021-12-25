@@ -188,7 +188,23 @@ public class Vector implements Iterable<Double> {
 
     @Override
     public String toString() {
-        return Arrays.toString(v);
+        String vec = "[";
+
+        for (int i = 0; i < length; i++) {
+            String fmt = String.format("%.3f", v[i]);
+
+            if (v[0] < 0 && i != 0)
+                vec += " ";
+
+            if (fmt.charAt(0) != '-' && i != 0)
+                vec += " " + fmt;
+            else vec += fmt;
+        
+            if (i < length - 1)
+                vec += "\n";
+        }
+        return vec + "]";
+        // return Arrays.toString(v);
     } 
 
     @Override

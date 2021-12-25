@@ -1,6 +1,5 @@
 package org.la;
 
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import org.la.factory.MatrixFactory;
@@ -16,12 +15,46 @@ public class Matrix implements Iterable<Double> {
 
     public Matrix(String matrix) {
         mat = MatrixFactory.fromString(matrix);
-        rows = mat.length;
-        cols = mat[0].length;
+        this.rows = mat.length;
+        this.cols = mat[0].length;
     }
 
     public Matrix(double[][] matrix) {
         mat = MatrixFactory.fromArray(matrix);
+        this.rows = mat.length;
+        this.cols = mat[0].length;
+    }
+
+    public static Matrix fromString(String matString) {
+        return new Matrix(MatrixFactory.fromString(matString));
+    }
+
+    public static Matrix fromArray(double[][] arr) {
+        return new Matrix(arr);
+    } 
+
+    public static Matrix fromConstant(int rows, int cols, double value) {
+        return new Matrix(MatrixFactory.fromConstant(rows, cols, value));
+    }
+
+    public static Matrix fromConstant(int size, double value) {
+        return new Matrix(MatrixFactory.fromConstant(size, value));
+    }
+
+    public static Matrix fromSize(int rows, int cols) {
+        return new Matrix(MatrixFactory.fromSize(rows, cols));
+    }
+
+    public static Matrix fromSize(int size) {
+        return new Matrix(MatrixFactory.fromSize(size));
+    }
+
+    public static Matrix fromVectorsHorizontal(Vector ... v) {
+        return new Matrix(MatrixFactory.fromVectorsHorizontal(v));
+    }
+
+    public static Matrix  fromVectorsVertical(Vector ... v) {
+        return new Matrix(MatrixFactory.fromVectorsVertical(v));
     }
 
     public int rows() {
@@ -79,7 +112,11 @@ public class Matrix implements Iterable<Double> {
     }
 
     public boolean isSquare() {
-        return cols() == rows();
+        return rows == cols;
+    }
+
+    public boolean isEmpty() {
+        return (rows == 0) || (cols == 0);
     }
 
     public Vector getRow(int i) {
@@ -391,8 +428,36 @@ public class Matrix implements Iterable<Double> {
 
     @Override
     public String toString() {
-        // TODO:
-        return Arrays.deepToString(mat);
+        // TODO: Clean up toString
+        String out = "[";
+        String padding = !isEmpty() && get(0, 0) < 0 ? " " : "";
+
+        String rowDelimeter = "\n";
+        String colDelimeter = ",  ";
+            
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                double x = get(i, j);
+                String fmt = String.format("%.3f", x);
+
+                if (i != 0 && j == 0) out += padding;
+                if (x >= 0 && i != 0 && j == 0) out += " ";
+                
+                if (j == 0) out += "[";
+
+                out += fmt;
+                if (j < cols - 1) {
+                    if (get(i, j+1) > 0)
+                        out += colDelimeter;
+                    else
+                        out += colDelimeter.substring(0, colDelimeter.length()-1);
+                }
+            }
+            out += "]";
+            if (i < rows - 1)
+                out += rowDelimeter;
+        }
+        return out + "]";
     }
 
     @Override

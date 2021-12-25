@@ -1,8 +1,8 @@
 package org.la;
 
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import org.la.factory.VectorFactory;
 import org.la.iterator.VectorIterator;
 
 public class Vector implements Iterable<Double> {
@@ -12,8 +12,20 @@ public class Vector implements Iterable<Double> {
 
     public Vector(double ... v) {
         this.length = v.length;
-        this.v = new double[length];
-        System.arraycopy(v, 0, this.v, 0, length);
+        this.v = VectorFactory.fromArray(v);
+    }
+
+    public Vector(String vecString) {
+        this.v = VectorFactory.fromString(vecString);
+        this.length = v.length;
+    }
+
+    public static Vector fromMatrixRow(Matrix m, int row) {
+        return m.getRow(row);
+    }
+
+    public static Vector fromMatrixCol(Matrix m, int col) {
+        return m.getCol(col);
     }
 
     public double get(int index) {

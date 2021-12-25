@@ -38,7 +38,7 @@ public class Vector implements Iterable<Double> {
         return true;
     }
 
-    private Vector blank(int size) {
+    public static Vector blank(int size) {
         return new Vector(new double[size]);
     }
 

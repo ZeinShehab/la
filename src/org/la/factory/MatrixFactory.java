@@ -47,7 +47,7 @@ public class MatrixFactory {
 	public static double[][] fromConstant(int rows, int cols, double value) {
 		double[][] m = new double[rows][cols];
 		for (int i = 0; i < rows; i++)
-			for (int j = 0; j < cols; i++)
+			for (int j = 0; j < cols; j++)
 				m[i][j] = value;	
 
 		return m;

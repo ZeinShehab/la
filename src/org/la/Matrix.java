@@ -7,8 +7,6 @@ import org.la.iterator.MatrixIterator;
 import org.la.iterator.VectorIterator;
 
 public class Matrix implements Iterable<Double> {
-    private final double EPS = Math.pow(10, -6);
-
     private double[][] mat;
     private int rows;
     private int cols;
@@ -124,9 +122,8 @@ public class Matrix implements Iterable<Double> {
     }
 
     public Vector getCol(int j) {
-        // TODO VectorFactory
         VectorIterator it = colIterator(j);
-        Vector v = Vector.blank(cols);
+        Vector v = Vector.blankOfLength(rows);
 
         while (it.hasNext()) {
             double x = it.next();
@@ -209,7 +206,6 @@ public class Matrix implements Iterable<Double> {
             fail("Matrices have different sizes");
         }
 
-        // TODO iterator?
         double[][] mult = new double[this.rows][cols];
 
         for (int k = 0; k < this.cols; k++) {
@@ -368,7 +364,7 @@ public class Matrix implements Iterable<Double> {
 
             @Override
             public boolean hasNext() {
-                return index + 1 < rows;
+                return index + 1 < cols;
             }
 
             @Override
@@ -403,7 +399,7 @@ public class Matrix implements Iterable<Double> {
 
             @Override
             public boolean hasNext() {
-                return index + 1 < cols;
+                return index + 1 < rows;
             }
 
             @Override
@@ -468,7 +464,7 @@ public class Matrix implements Iterable<Double> {
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof Matrix)
-            return equals((Matrix) obj, EPS);
+            return equals((Matrix) obj, Linear.EPS);
         return false;
     }
 

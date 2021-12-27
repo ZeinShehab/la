@@ -6,7 +6,6 @@ import org.la.factory.VectorFactory;
 import org.la.iterator.VectorIterator;
 
 public class Vector implements Iterable<Double> {
-    private static final double EPS = Math.pow(10, -6);
     private double[] v;
     private int length;
 
@@ -50,8 +49,12 @@ public class Vector implements Iterable<Double> {
         return true;
     }
 
-    public static Vector blank(int size) {
-        return new Vector(new double[size]);
+    public Vector blank() {
+        return blankOfLength(length);
+    }
+
+    public static Vector blankOfLength(int length) {
+        return new Vector(new double[length]);
     }
 
     public Vector negate() {
@@ -60,7 +63,7 @@ public class Vector implements Iterable<Double> {
 
     public Vector add(double a) {
         VectorIterator it = iterator();
-        Vector result = blank(length);
+        Vector result = blank();
 
         while(it.hasNext()) {
             double x = it.next();
@@ -74,7 +77,7 @@ public class Vector implements Iterable<Double> {
         checkLengths(v);
 
         VectorIterator it = iterator();
-        Vector result = blank(length);
+        Vector result = blank();
 
         while(it.hasNext()) {
             double x = it.next();
@@ -94,7 +97,7 @@ public class Vector implements Iterable<Double> {
 
     public Vector mul(double a) {
         VectorIterator it = iterator();
-        Vector result = blank(length);
+        Vector result = blank();
 
         while (it.hasNext()) {
             double x = it.next();
@@ -108,7 +111,7 @@ public class Vector implements Iterable<Double> {
         checkLengths(v);
 
         VectorIterator it = iterator();
-        Vector result = blank(length);
+        Vector result = blank();
 
         while (it.hasNext()) {
             double x = it.next();
@@ -222,7 +225,7 @@ public class Vector implements Iterable<Double> {
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof Vector)
-            return equals((Vector) obj, EPS);
+            return equals((Vector) obj, Linear.EPS);
         return false;
     }
 

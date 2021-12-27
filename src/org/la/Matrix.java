@@ -142,7 +142,7 @@ public class Matrix implements Iterable<Double> {
     }
 
     public static Matrix blankOfSize(int rows, int cols) {
-        return new Matrix(new double[rows][cols]);
+        return fromSize(rows, cols);
     }
 
     public static Matrix eye(int n) {
@@ -194,6 +194,21 @@ public class Matrix implements Iterable<Double> {
             int i = it.rowIndex();
             int j = it.colIndex();
             res.set(i, j, x * a);
+        }
+        return res;
+    }
+
+    public Vector mul(Vector v) {
+        Vector res = Vector.blankOfLength(rows);
+        VectorIterator it = res.iterator();
+
+        if (!isSquare())
+            // TODO non square matrices?
+            throw new IllegalArgumentException("Linear transformation matrix must be square for now");
+
+        while (it.hasNext()) {
+            it.next();
+            it.set(v.dot(getRow(it.index())));
         }
         return res;
     }
@@ -443,7 +458,7 @@ public class Matrix implements Iterable<Double> {
 
                 out += fmt;
                 if (j < cols - 1) {
-                    if (get(i, j+1) > 0)
+                    if (get(i, j+1) >= 0)
                         out += colDelimeter;
                     else
                         out += colDelimeter.substring(0, colDelimeter.length()-1);

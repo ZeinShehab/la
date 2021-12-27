@@ -2,8 +2,9 @@ package org.la.factory;
 
 import org.la.Matrix;
 import org.la.Vector;
+import org.la.Linear;
 
-// TODO return Matrix ??
+
 public class MatrixFactory {
 	/**
 	 * Parses matrix from string of the format {@code [1 2 3; 4 5 6; 7 8 9]}
@@ -18,12 +19,12 @@ public class MatrixFactory {
 		matString = " " + matString.replace("[", "").replace("]", "");
 
 		String[] cols;
-		String[] rows = matString.split(";");
+		String[] rows = matString.split(Linear.ROW_DELIMITER);
 
 		double[][] numM = new double[rows.length][];
 
 		for (int i = 0; i < rows.length; i++) {
-			cols = rows[i].substring(1).split(" ");
+			cols = rows[i].substring(1).split(Linear.COL_DELIMITER);
 			numM[i] = new double[cols.length]; 
 
 			for (int j = 0; j < cols.length; j++)

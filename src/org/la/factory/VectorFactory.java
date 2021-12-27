@@ -1,5 +1,7 @@
 package org.la.factory;
 
+import org.la.Linear;
+
 public class VectorFactory {
     public static double[] fromArray(double[] arr) {
         double[] res = new double[arr.length];
@@ -9,7 +11,7 @@ public class VectorFactory {
 
     public static double[] fromString(String vec) {
         vec = vec.replaceAll("\\[|\\]", "");
-        String[] vals = vec.split(" ");
+        String[] vals = vec.split(Linear.COL_DELIMITER);
         double[] res = new double[vals.length];
 
         for (int i = 0; i < vals.length; i++) {

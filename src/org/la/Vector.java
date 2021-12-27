@@ -19,6 +19,22 @@ public class Vector implements Iterable<Double> {
         this.length = v.length;
     }
 
+    public static Vector fromLength(int length) {
+        return new Vector(VectorFactory.fromLength(length));
+    }
+
+    public static Vector fromRange(double start, double end, double step) {
+        return new Vector(VectorFactory.fromRange(start, end, step));
+    }
+
+    public static Vector fromRange(double start, double end) {
+        return new Vector(VectorFactory.fromRange(start, end));
+    }
+
+    public static Vector fromRange(int end) {
+        return new Vector(VectorFactory.fromRange(end));
+    }
+
     public static Vector fromMatrixRow(Matrix m, int row) {
         return m.getRow(row);
     }
@@ -54,7 +70,7 @@ public class Vector implements Iterable<Double> {
     }
 
     public static Vector blankOfLength(int length) {
-        return new Vector(new double[length]);
+        return fromLength(length);
     }
 
     public Vector negate() {
@@ -119,6 +135,22 @@ public class Vector implements Iterable<Double> {
             result.set(i, x * v.get(i));
         }
         return result;
+    }
+
+    public Vector mul(Matrix m) {
+        VectorIterator it = iterator();
+        Vector res = blank();
+
+        if (!m.isSquare())
+            // TODO non square matrices?
+            throw new IllegalArgumentException("Linear transformation matrix must be square for now");
+
+        while (it.hasNext()) {
+            it.next();
+            int i = it.index();
+            res.set(i, dot(m.getRow(i)));
+        }
+        return res;
     }
 
     public double dot(Vector v) {

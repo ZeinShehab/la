@@ -4,12 +4,6 @@ import org.la.Linear;
 import org.la.Vector;
 
 public class VectorFactory {
-    // public static double[] fromArray(double[] arr) {
-    //     double[] res = new double[arr.length];
-    //     System.arraycopy(arr, 0, res, 0, arr.length);
-    //     return res;
-    // }
-
     public static Vector fromArray(double ... arr) {
         return new Vector(arr);
     }
@@ -26,6 +20,7 @@ public class VectorFactory {
     }
     
     public static Vector fromLength(int length) {
+        // TODO: optimization: copying array for no reason
         return new Vector(new double[length]);
     }
 

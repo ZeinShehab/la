@@ -15,77 +15,70 @@ public class MatrixFactory {
 	 * @param matString String following the above format
 	 * @return 2D array representation of string as matrix
 	 */
-	public static double[][] fromString(String matString) {
+	public static Matrix fromString(String matString) {
 		matString = " " + matString.replace("[", "").replace("]", "");
 
 		String[] cols;
 		String[] rows = matString.split(Linear.ROW_DELIMITER);
 
-		double[][] numM = new double[rows.length][];
+		int colLen = rows[0].substring(1).split(Linear.COL_DELIMITER).length;
+		Matrix res = fromSize(rows.length, colLen);
 
 		for (int i = 0; i < rows.length; i++) {
 			cols = rows[i].substring(1).split(Linear.COL_DELIMITER);
-			numM[i] = new double[cols.length]; 
 
 			for (int j = 0; j < cols.length; j++)
-				numM[i][j] = Double.parseDouble(cols[j]);
+				res.set(i, j, Double.parseDouble(cols[j]));
 		}
-		return numM;
+		return res;
 	}
 
-	public static double[][] fromArray(double[][] arr) {
-		double[][] mat = new double[arr.length][];
-
-		for (int i = 0; i < mat.length; i++) {
-			int size = arr[i].length;
-			mat[i] = new double[size];
-			System.arraycopy(arr[i], 0, mat[i], 0, size);
-		}
-		return mat;
+	public static Matrix fromArray(double[][] arr) {
+		return new Matrix(arr);
 	}
 
-	public static double[][] fromConstant(int rows, int cols, double value) {
-		double[][] m = new double[rows][cols];
+	public static Matrix fromConstant(int rows, int cols, double value) {
+		Matrix res = fromSize(rows, cols);
+
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++)
-				m[i][j] = value;	
-
-		return m;
+				res.set(i, j, value);
+		return res;
 	}
 
-	public static double[][] fromConstant(int size, double value) {
+	public static Matrix fromConstant(int size, double value) {
 		return fromConstant(size, size, value);
 	}
 
-	public static double[][] fromSize(int rows, int cols) {
-		return new double[rows][cols];
+	public static Matrix fromSize(int rows, int cols) {
+		// TODO: optimization: copying array for no reason
+		return fromArray(new double[rows][cols]);
 	}
 
-	public static double[][] fromSize(int size) {
-		return new double[size][size];
+	public static Matrix fromSize(int size) {
+		return fromSize(size, size);
 	}
 
-	public static double[][] fromVectorsHorizontal(Vector ... v) {
-		double[][] m = new double[v.length][];
+	public static Matrix fromVectorsHorizontal(Vector ... v) {
+		if (v.length == 0 || v[0] == null)
+			throw new IllegalArgumentException("Invalid input size");
 
-		for (int i = 0; i < v.length; i++) {
-			m[i] = v[i].toArray();
-		}
-		return m;
+		Matrix res = fromSize(v.length, v[0].length());
+
+		for (int i = 0; i < v.length; i++)
+			res.setRow(i, v[i]);
+		return res;
 	}
 
-	public static double[][] fromVectorsVertical(Vector ... v) {
+	public static Matrix fromVectorsVertical(Vector ... v) {
 		if (v.length == 0 || v[0] == null)
 			throw new IllegalArgumentException("Invalid input size");
 		
-		double[][] m = new double[v[0].length()][v.length];
+		Matrix res = fromSize(v[0].length(), v.length);
 
-		for (int i = 0; i < v[0].length(); i++) {
-			for (int j = 0; j < v.length; j++) {
-				m[i][j] = v[j].get(i);
-			}
-		}
-		return m;
+		for (int i = 0; i < v[0].length(); i++)
+			res.setCol(i, v[i]);
+		return res;
 	}
 
 	public static Matrix identity(int size) {
@@ -93,6 +86,6 @@ public class MatrixFactory {
 		for (int i = 0; i < size; i++) {
 			m[i][i] = 1;
 		}
-		return new Matrix(m);
+		return fromArray(m);
 	}
 }

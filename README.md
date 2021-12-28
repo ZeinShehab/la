@@ -7,11 +7,11 @@ la (Linear Algebra) is a personal project that I decided to work on as a student
 
 ## TODO
 
-- [-] Add more constructors for the Factories
-- [-] Add more operations for Vectors and Matrices 
-- [-] Handle Vector operations with non-square Matrices
-- [-] Improve ArrayUtils 
-- [-] Properly report errors
-- [-] Optimization
-- [-] Documentation
-- [-] Solver
+- [ ] Add more constructors for the Factories
+- [ ] Add more operations for Vectors and Matrices 
+- [ ] Handle Vector operations with non-square Matrices
+- [ ] Improve ArrayUtils 
+- [ ] Properly report errors
+- [ ] Optimization
+- [ ] Documentation
+- [ ] Solver

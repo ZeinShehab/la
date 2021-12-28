@@ -10,9 +10,8 @@ public class Vector implements Iterable<Double> {
     private int length;
 
     public Vector(double ... v) {
+        this.v = ArrayUtils.copyOf(v);
         this.length = v.length;
-        this.v = new double[length];
-        System.arraycopy(v, 0, this.v, 0, length);
     }
 
     public static Vector fromArray(double ... v) {
@@ -241,9 +240,7 @@ public class Vector implements Iterable<Double> {
     }
 
     public double[] toArray() {
-        double[] res = new double[length];
-        System.arraycopy(v, 0, res, 0, length);
-        return res;
+        return ArrayUtils.copyOf(v);
     }
 
     @Override
@@ -264,7 +261,6 @@ public class Vector implements Iterable<Double> {
                 vec += "\n";
         }
         return vec + "]";
-        // return Arrays.toString(v);
     } 
 
     @Override

@@ -11,28 +11,32 @@ public class Vector implements Iterable<Double> {
 
     public Vector(double ... v) {
         this.length = v.length;
-        this.v = VectorFactory.fromArray(v);
+        this.v = new double[length];
+        System.arraycopy(v, 0, this.v, 0, length);
     }
 
-    public Vector(String vecString) {
-        this.v = VectorFactory.fromString(vecString);
-        this.length = v.length;
+    public static Vector fromArray(double ... v) {
+        return VectorFactory.fromArray(v);
+    }
+
+    public static Vector fromString(String vecString) {
+        return VectorFactory.fromString(vecString);
     }
 
     public static Vector fromLength(int length) {
-        return new Vector(VectorFactory.fromLength(length));
+        return VectorFactory.fromLength(length);
     }
 
     public static Vector fromRange(double start, double end, double step) {
-        return new Vector(VectorFactory.fromRange(start, end, step));
+        return VectorFactory.fromRange(start, end, step);
     }
 
     public static Vector fromRange(double start, double end) {
-        return new Vector(VectorFactory.fromRange(start, end));
+        return VectorFactory.fromRange(start, end);
     }
 
     public static Vector fromRange(int end) {
-        return new Vector(VectorFactory.fromRange(end));
+        return VectorFactory.fromRange(end);
     }
 
     public static Vector fromMatrixRow(Matrix m, int row) {
@@ -49,6 +53,15 @@ public class Vector implements Iterable<Double> {
 
     public void set(int index, double value) {
         this.v[index] = value;
+    }
+
+    public void setAll(double value) {
+        VectorIterator it = iterator();
+
+        while (it.hasNext()) {
+            it.next();
+            it.set(value);
+        }
     }
 
     public int length() {
@@ -283,8 +296,7 @@ public class Vector implements Iterable<Double> {
 
     @Override
     public Vector clone() {
-        double[] res = toArray();
-        return new Vector(res);
+        return new Vector(v);
     }
 
     @Override

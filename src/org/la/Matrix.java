@@ -11,48 +11,42 @@ public class Matrix implements Iterable<Double> {
     private int rows;
     private int cols;
 
-    public Matrix(String matrix) {
-        mat = MatrixFactory.fromString(matrix);
-        this.rows = mat.length;
-        this.cols = mat[0].length;
-    }
-
-    public Matrix(double[][] matrix) {
-        mat = MatrixFactory.fromArray(matrix);
-        this.rows = mat.length;
-        this.cols = mat[0].length;
+    public Matrix(double[][] arr) {
+        mat = ArrayUtils.deepCopyOf(arr);
+        this.rows = arr.length;
+        this.cols = arr[0].length;
     }
 
     public static Matrix fromString(String matString) {
-        return new Matrix(MatrixFactory.fromString(matString));
+        return MatrixFactory.fromString(matString);
     }
 
     public static Matrix fromArray(double[][] arr) {
-        return new Matrix(arr);
+        return MatrixFactory.fromArray(arr);
     } 
 
     public static Matrix fromConstant(int rows, int cols, double value) {
-        return new Matrix(MatrixFactory.fromConstant(rows, cols, value));
+        return MatrixFactory.fromConstant(rows, cols, value);
     }
 
     public static Matrix fromConstant(int size, double value) {
-        return new Matrix(MatrixFactory.fromConstant(size, value));
+        return MatrixFactory.fromConstant(size, value);
     }
 
     public static Matrix fromSize(int rows, int cols) {
-        return new Matrix(MatrixFactory.fromSize(rows, cols));
+        return MatrixFactory.fromSize(rows, cols);
     }
 
     public static Matrix fromSize(int size) {
-        return new Matrix(MatrixFactory.fromSize(size));
+        return MatrixFactory.fromSize(size);
     }
 
     public static Matrix fromVectorsHorizontal(Vector ... v) {
-        return new Matrix(MatrixFactory.fromVectorsHorizontal(v));
+        return MatrixFactory.fromVectorsHorizontal(v);
     }
 
     public static Matrix  fromVectorsVertical(Vector ... v) {
-        return new Matrix(MatrixFactory.fromVectorsVertical(v));
+        return MatrixFactory.fromVectorsVertical(v);
     }
 
     public int rows() {
@@ -106,7 +100,7 @@ public class Matrix implements Iterable<Double> {
     }
 
     public double[][] toArray() {
-        return MatrixFactory.fromArray(mat);
+        return ArrayUtils.deepCopyOf(mat);
     }
 
     public boolean isSquare() {
@@ -230,7 +224,7 @@ public class Matrix implements Iterable<Double> {
                 }
             }
         }
-        return new Matrix(mult);
+        return fromArray(mult);
     } 
 
     public Matrix div(double a) {
@@ -271,14 +265,17 @@ public class Matrix implements Iterable<Double> {
         if (!isSquare())
             fail("Cannot compute cofactor of non-square matrix");
 
-        double[][] cof = new double[rows][rows];
+        Matrix res = fromSize(rows);
+        MatrixIterator it = res.iterator();
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < rows; j++) {
-                cof[i][j] = Math.pow(-1, i + j) * subMatrix(i, j).det();
-            }
+        while (it.hasNext()) {
+            it.next();
+            int i = it.rowIndex();
+            int j = it.colIndex();
+
+            it.set(Math.pow(-1, i+j) * subMatrix(i, j).det());
         }
-        return new Matrix(cof);
+        return res;
     }
 
     public Matrix inverse() {
@@ -473,7 +470,7 @@ public class Matrix implements Iterable<Double> {
 
     @Override
     public Matrix clone() {
-        return new Matrix(mat);
+        return fromArray(mat);
     }
 
     @Override

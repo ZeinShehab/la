@@ -24,8 +24,6 @@ public class VectorFactory {
         return new Vector(new double[length]);
     }
 
-    // TODO: potentially introduce automatic step detection like haskell
-    // accept input of the form [1,2..20] or [1,3..20] .split(,|..)
     public static Vector fromRange(double start, double end, double step) {
         int size = (int) Math.ceil((end - start) / step);
         Vector res = fromLength(size);
@@ -43,6 +41,18 @@ public class VectorFactory {
     public static Vector fromRange(int end) {
         return fromRange(0, end, 1);
     }
+
+    // public static Vector fromRange(String range) {
+    //     Range r = new Range(range);    
+    //     return fromRange(r);
+    // }
+
+    // public static Vector fromRange(Range r) {
+    //     if (r.isInfinite()) 
+    //         throw new IllegalArgumentException("Infinte size Vectors are not supported. Use BigVector instead");
+        
+    //         return fromRange(r.start(), r.end(), r.step());
+    // }
 
     public static Vector fromConstant(int length, double value) {
         Vector res = fromLength(length);

@@ -63,6 +63,31 @@ public class Vector implements Iterable<Double> {
         }
     }
 
+    public void push(double value) {
+        this.v = ArrayUtils.expand(this.v, 1);
+        this.v[length] = value;
+        length++;
+    }
+
+    public double pop() {
+        double x = v[length-1];
+        this.v = ArrayUtils.shrink(this.v, 1);
+        length--;
+        return x;
+    }
+
+    public void insert(double value, int index) {
+        this.v = ArrayUtils.insert(this.v, value, index);
+        length++;
+    }
+
+    public double remove(int index) {
+        double x = v[index];
+        this.v = ArrayUtils.remove(this.v, index);
+        length--;
+        return x;
+    }
+
     public int length() {
         return length;
     }

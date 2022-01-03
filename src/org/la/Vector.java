@@ -69,19 +69,21 @@ public class Vector implements Iterable<Double> {
         length++;
     }
 
+    public void push(double ... values) {
+        this.v = ArrayUtils.join(this.v, values);
+        length += values.length;
+    }
+
+    public void push(int index, double ... values) {
+        this.v = ArrayUtils.insert(this.v, index, values);
+        length += values.length;
+    }
+
     public double pop() {
-        double x = v[length-1];
-        this.v = ArrayUtils.shrink(this.v, 1);
-        length--;
-        return x;
+        return pop(length-1);
     }
 
-    public void insert(double value, int index) {
-        this.v = ArrayUtils.insert(this.v, value, index);
-        length++;
-    }
-
-    public double remove(int index) {
+    public double pop(int index) {
         double x = v[index];
         this.v = ArrayUtils.remove(this.v, index);
         length--;
@@ -90,6 +92,14 @@ public class Vector implements Iterable<Double> {
 
     public int length() {
         return length;
+    }
+
+    public double head() {
+        return v[0];
+    }
+
+    public double tail() {
+        return v[length-1];
     }
 
     public boolean isZero() {

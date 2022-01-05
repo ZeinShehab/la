@@ -51,8 +51,7 @@ public class MatrixFactory {
 	}
 
 	public static Matrix fromSize(int rows, int cols) {
-		// TODO: optimization: copying array for no reason
-		return fromArray(new double[rows][cols]);
+		return new Matrix(new double[rows][cols], false);
 	}
 
 	public static Matrix fromSize(int size) {

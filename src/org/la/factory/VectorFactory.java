@@ -20,8 +20,7 @@ public class VectorFactory {
     }
     
     public static Vector fromLength(int length) {
-        // TODO: optimization: copying array for no reason
-        return new Vector(new double[length]);
+        return new Vector(new double[length], false);
     }
 
     public static Vector fromRange(double start, double end, double step) {

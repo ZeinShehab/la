@@ -10,7 +10,14 @@ public class Vector implements Iterable<Double> {
     private int length;
 
     public Vector(double ... v) {
-        this.v = ArrayUtils.copyOf(v);
+        this(v, true);
+    }
+
+    public Vector(double[] arr, boolean copy) {
+        if (!copy)
+            this.v = arr;
+        else
+            this.v = ArrayUtils.copyOf(arr);
         this.length = v.length;
     }
 
@@ -61,33 +68,6 @@ public class Vector implements Iterable<Double> {
             it.next();
             it.set(value);
         }
-    }
-
-    public void push(double value) {
-        this.v = ArrayUtils.expand(this.v, 1);
-        this.v[length] = value;
-        length++;
-    }
-
-    public void push(double ... values) {
-        this.v = ArrayUtils.join(this.v, values);
-        length += values.length;
-    }
-
-    public void push(int index, double ... values) {
-        this.v = ArrayUtils.insert(this.v, index, values);
-        length += values.length;
-    }
-
-    public double pop() {
-        return pop(length-1);
-    }
-
-    public double pop(int index) {
-        double x = v[index];
-        this.v = ArrayUtils.remove(this.v, index);
-        length--;
-        return x;
     }
 
     public int length() {
@@ -272,6 +252,40 @@ public class Vector implements Iterable<Double> {
             fail("Cannot normalize zero vector");
         }
         return div(norm());
+    }
+
+    public double min() {
+        VectorIterator it = iterator();
+        double x = 0;
+
+        if (length > 0)
+            x = it.next();
+        else
+            fail("Can't find min of vector with length 0");
+
+        while (it.hasNext()) {
+            double y = it.next();
+            if (y < x)
+                x = y;
+        }
+        return x;
+    }
+
+    public double max() {
+        VectorIterator it = iterator();
+        double x = 0;
+
+        if (length > 0)
+            x = it.next();
+        else
+            fail("Can't find min of vector with length 0");
+
+        while (it.hasNext()) {
+            double y = it.next();
+            if (y > x)
+                x = y;
+        }
+        return x;
     }
 
     public double[] toArray() {

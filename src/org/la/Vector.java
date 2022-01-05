@@ -5,14 +5,24 @@ import java.util.NoSuchElementException;
 import org.la.factory.VectorFactory;
 import org.la.iterator.VectorIterator;
 
+/**
+ * A vector is represented by an array of real numbers. It has a fixed size
+ */
 public class Vector implements Iterable<Double> {
     private double[] v;
     private int length;
 
+    /**
+     * @see {@link #Vector(double[], boolean)}
+     */
     public Vector(double ... v) {
         this(v, true);
     }
 
+    /**
+     * Creates a new vector from given array {@code arr}. If {@code copy} is set to true it copies the array
+     * otherwise it points the internal vector array to the same array. It is true by default
+     */
     public Vector(double[] arr, boolean copy) {
         if (!copy)
             this.v = arr;
@@ -21,46 +31,85 @@ public class Vector implements Iterable<Double> {
         this.length = v.length;
     }
 
+    /**
+     * Creates a new vector from given array {@code v} while copying the given array
+     */
     public static Vector fromArray(double ... v) {
         return VectorFactory.fromArray(v);
     }
 
+    /**
+     * Creates a new vector from given string {@code vecString}
+     * It uses strings of the format {@code [1 2 3]} were spaces seperate the elements
+     */
     public static Vector fromString(String vecString) {
         return VectorFactory.fromString(vecString);
     }
 
+    /**
+     * Creates a new vector of given {@code length}
+     */
     public static Vector fromLength(int length) {
         return VectorFactory.fromLength(length);
     }
 
+    /**
+     * Creates a new vector of given range
+     */
     public static Vector fromRange(double start, double end, double step) {
         return VectorFactory.fromRange(start, end, step);
     }
 
+    /**
+     * Creates a new vector of given range with step set to 1 by default
+     */
     public static Vector fromRange(double start, double end) {
         return VectorFactory.fromRange(start, end);
     }
 
+    /**
+     * Creates a new vector from range with the {@code start=0} and {@code step=1}  
+     */
     public static Vector fromRange(int end) {
         return VectorFactory.fromRange(end);
     }
 
+    /** 
+     * Creates a new vector from given matrix {@code m} at row {@code row} 
+     */
     public static Vector fromMatrixRow(Matrix m, int row) {
         return m.getRow(row);
     }
 
+    /** 
+     * Creates a new vector from given matrix {@code m} at col {@code col} 
+     */
     public static Vector fromMatrixCol(Matrix m, int col) {
         return m.getCol(col);
     }
 
+    /**
+     * Returns the value at {@code index}
+     * @param index index
+     * @return value at index
+     */
     public double get(int index) {
         return this.v[index];
     }
 
+    /**
+     * Sets the value at {@code index} to {@code value} 
+     * @param index index
+     * @param value a value
+     */
     public void set(int index, double value) {
         this.v[index] = value;
     }
 
+    /**
+     * Sets all values of the vector to {@code value}
+     * @param value a value
+     */
     public void setAll(double value) {
         VectorIterator it = iterator();
 
@@ -70,18 +119,30 @@ public class Vector implements Iterable<Double> {
         }
     }
 
+    /**
+     * Returns the length of the vector
+     */
     public int length() {
         return length;
     }
 
+    /**
+     * Returns the first element of the vector
+     */
     public double head() {
         return v[0];
     }
 
+    /**
+     * Returns the last element of the vector
+     */
     public double tail() {
         return v[length-1];
     }
 
+    /**
+     * Returns whether all the elements of the vector are zero or not
+     */
     public boolean isZero() {
         VectorIterator it = iterator();
         
@@ -92,18 +153,37 @@ public class Vector implements Iterable<Double> {
         return true;
     }
 
+    /**
+     * Creates a new vector of instance {@code length} initialized to all zeros
+     * @see {@link #blankOfLength(int)}
+     * @return blank vector
+     */
     public Vector blank() {
         return blankOfLength(length);
     }
 
+    /**
+     * Creates a new vector of length {@code length} initialized to all zeros
+     * @return blank vector
+     */
     public static Vector blankOfLength(int length) {
         return fromLength(length);
     }
 
+    /**
+     * Returns negation of instance vector {@code v}
+     * @return -v
+     * @see {@link #mul(double)}
+     */
     public Vector negate() {
         return mul(-1);
     }
 
+    /**
+     * Returns new vector with {@code a} added to all elements of instance {@code v}
+     * @param a a value
+     * @return v + a
+     */
     public Vector add(double a) {
         VectorIterator it = iterator();
         Vector result = blank();
@@ -116,8 +196,13 @@ public class Vector implements Iterable<Double> {
         return result;
     }
 
-    public Vector add(Vector v) {
-        checkLengths(v);
+    /**
+     * Returns sum of instance vector {@code v} and {@code u}
+     * @param u a vector
+     * @return v + u
+     */
+    public Vector add(Vector u) {
+        checkLengths(u);
 
         VectorIterator it = iterator();
         Vector result = blank();
@@ -125,19 +210,37 @@ public class Vector implements Iterable<Double> {
         while(it.hasNext()) {
             double x = it.next();
             int i = it.index();
-            result.set(i, x + v.get(i));
+            result.set(i, x + u.get(i));
         }
         return result;
     }
 
+    /**
+     * Returns new vector with {@code a} subtracted from all elements of instance {@code v}
+     * @param a a value
+     * @return v - a
+     * @see {@link #add(double)}
+     */
     public Vector sub(double a) {
         return add(-a);
     }
 
-    public Vector sub(Vector v) {
-        return add(v.negate());
+    /**
+     * Returns sum of instance vector {@code v} and {@code u}
+     * @param u a vector
+     * @return v - u
+     * @see {@link #add(double)}
+     * @see {@link #negate()}
+     */
+    public Vector sub(Vector u) {
+        return add(u.negate());
     }
 
+    /**
+     * Returns new vector of instance {@code v} multiplied with {@code a}
+     * @param a a value
+     * @return v * a
+     */
     public Vector mul(double a) {
         VectorIterator it = iterator();
         Vector result = blank();
@@ -150,8 +253,13 @@ public class Vector implements Iterable<Double> {
         return result;
     }
 
-    public Vector mul(Vector v) {
-        checkLengths(v);
+    /**
+     * Returns a new vector of instance {@code v} multiplied by elements of vector {@code u}
+     * @param u a vector
+     * @return v * u
+     */
+    public Vector mul(Vector u) {
+        checkLengths(u);
 
         VectorIterator it = iterator();
         Vector result = blank();
@@ -159,11 +267,16 @@ public class Vector implements Iterable<Double> {
         while (it.hasNext()) {
             double x = it.next();
             int i = it.index();
-            result.set(i, x * v.get(i));
+            result.set(i, x * u.get(i));
         }
         return result;
     }
 
+    /**
+     * Returns new vector of instance vector {@code v} multiplied/transformed by matrix {@code m} 
+     * @param m a square matrix
+     * @return v * m
+     */
     public Vector mul(Matrix m) {
         VectorIterator it = iterator();
         Vector res = blank();
@@ -180,8 +293,13 @@ public class Vector implements Iterable<Double> {
         return res;
     }
 
-    public double dot(Vector v) {
-        checkLengths(v);
+    /**
+     * Calculates the dot product of instance vector {@code v} and {@code u}
+     * @param u a vector
+     * @return v.u
+     */
+    public double dot(Vector u) {
+        checkLengths(u);
 
         VectorIterator it = iterator();
         double result = 0;
@@ -189,24 +307,50 @@ public class Vector implements Iterable<Double> {
         while (it.hasNext()) {
             double x = it.next();
             int i = it.index();
-            result += x * v.get(i);
+            result += x * u.get(i);
         }
         return result;
     }
 
+    /**
+     * Returns new vector of instance {@code v} divided by {@code a}
+     * @param a a non zero value
+     * @return v / a
+     */
     public Vector div(double a) {
+        if (a == 0)
+            throw new ArithmeticException("Can't divide by zero");
         return mul(1.0/a);
     }
 
+    /**
+     * Calculates the euclidean norm of instance vector {@code v}
+     * @return euclidean norm
+     * @see {@link #euclideanNorm()}
+     */
     public double norm() {
         return euclideanNorm();
     }
 
+    /**
+     * Calculates the square of the euclidean norm of instance
+     * @return eucliedean norm squared
+     */
     public double normSq() {
-        double x = norm();
-        return x*x;
+        VectorIterator it = iterator();
+        double result = 0;
+
+        while (it.hasNext()) {
+            double x = it.next();
+            result += x*x;
+        }
+        return result;
     }
 
+    /**
+     * Calculates the euclidean norm of the instance vector
+     * @return euclidean norm
+     */
     public double euclideanNorm() {
         VectorIterator it = iterator();
         double result = 0;
@@ -218,6 +362,10 @@ public class Vector implements Iterable<Double> {
         return Math.sqrt(result);
     }
 
+    /**
+     * Calculates the manhattan norm of the instance vector
+     * @return manhattan norm
+     */
     public double manhattanNorm() {
         VectorIterator it = iterator();
         double result = 0;
@@ -228,6 +376,10 @@ public class Vector implements Iterable<Double> {
         return result;
     }
 
+    /**
+     * Calculates the infinity norm of the instance vector
+     * @return infinity norm
+     */
     public double infinityNorm() {
         VectorIterator it = iterator();
         double result = 0;
@@ -243,10 +395,18 @@ public class Vector implements Iterable<Double> {
         return result;
     }
 
-    public double angle(Vector v) {
-        return Math.acos(dot(v) / (norm() * v.norm()));
+    /**
+     * Calculates the angle between instance vector {@code v} and {@code u}
+     * @param u a vector
+     * @return angle between v and u
+     */
+    public double angle(Vector u) {
+        return Math.acos(dot(u) / (norm() * u.norm()));
     }
 
+    /**
+     * Returns normalized vector of instance vector
+     */
     public Vector normalize() {
         if (isZero()) {
             fail("Cannot normalize zero vector");
@@ -254,6 +414,9 @@ public class Vector implements Iterable<Double> {
         return div(norm());
     }
 
+    /**
+     * Finds the minimum value of the instance
+     */
     public double min() {
         VectorIterator it = iterator();
         double x = 0;
@@ -271,6 +434,9 @@ public class Vector implements Iterable<Double> {
         return x;
     }
 
+    /**
+     * Finds the maximum value of the instance
+     */
     public double max() {
         VectorIterator it = iterator();
         double x = 0;
@@ -288,10 +454,16 @@ public class Vector implements Iterable<Double> {
         return x;
     }
 
+    /**
+     * Converts instance vector to an array
+     */
     public double[] toArray() {
         return ArrayUtils.copyOf(v);
     }
 
+    /**
+     * Returns conventional vector string representation of instance vector
+     */
     @Override
     public String toString() {
         String vec = "[";
@@ -312,6 +484,9 @@ public class Vector implements Iterable<Double> {
         return vec + "]";
     } 
 
+    /**
+     * Checks if instance vector is equal to {@code obj} with tolerance of {@code 1.0E-6}
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof Vector)
@@ -319,11 +494,17 @@ public class Vector implements Iterable<Double> {
         return false;
     }
 
-    public boolean equals(Vector v, double tolerance) {
-        if (this == v)
+    /**
+     * Checks if instance vector {@code v} equals {@code u} by given {@code tolerance}
+     * @param u a vector
+     * @param tolerance precision used to calculate equality
+     * @return v = u
+     */
+    public boolean equals(Vector u, double tolerance) {
+        if (this == u)
             return true;
         
-        if (this.length != v.length())
+        if (this.length != u.length())
             return false;
 
         VectorIterator it = iterator();
@@ -331,7 +512,7 @@ public class Vector implements Iterable<Double> {
 
         while (it.hasNext() && res) {
             double a = it.next();
-            double b = v.get(it.index());
+            double b = u.get(it.index());
             double d = Math.abs(a - b);
 
             res = (a == b) || (d < tolerance);
@@ -339,11 +520,17 @@ public class Vector implements Iterable<Double> {
         return res;
     }
 
+    /**
+     * Clones the instance vector
+     */
     @Override
     public Vector clone() {
         return new Vector(v);
     }
 
+    /**
+     * Creates a new {@code VectorIterator}
+     */
     @Override
     public VectorIterator iterator() {
         return new VectorIterator() {
@@ -380,11 +567,20 @@ public class Vector implements Iterable<Double> {
         };
     }
 
-    private void checkLengths(Vector v) {
-        if (length != v.length())
+    /**
+     * Makes sure instance vector and {@code u} have same length 
+     * before performing some operations
+     * @param u a vector
+     */
+    private void checkLengths(Vector u) {
+        if (length != u.length())
             fail("Vectors have different sizes");
     }
     
+    /**
+     * Fails with an {@code IllegalArgumentException}
+     * @param message error message
+     */
     private void fail(String message) {
         throw new IllegalArgumentException(message);
     }

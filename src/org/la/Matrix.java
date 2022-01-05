@@ -12,7 +12,14 @@ public class Matrix implements Iterable<Double> {
     private int cols;
 
     public Matrix(double[][] arr) {
-        mat = ArrayUtils.deepCopyOf(arr);
+        this(arr, true);
+    }
+
+    public Matrix(double[][] arr, boolean copy) {
+        if (!copy)
+            this.mat = arr;
+        else
+            mat = ArrayUtils.deepCopyOf(arr);
         this.rows = arr.length;
         this.cols = arr[0].length;
     }
@@ -76,7 +83,7 @@ public class Matrix implements Iterable<Double> {
 
     public void setRow(int index, Vector row) {
         if (cols != row.length())
-            fail("Invalid row size");
+            fail("Invalid row length");
 
         for (int i = 0; i < row.length(); i++)
             set(index, i, row.get(i));
@@ -93,7 +100,7 @@ public class Matrix implements Iterable<Double> {
 
     public void setCol(int index, Vector col) {
         if (rows != col.length())
-            fail("Invalid column size");
+            fail("Invalid column length");
 
         for (int i = 0; i < col.length(); i++) 
             set(i, index, col.get(i));
@@ -492,7 +499,7 @@ public class Matrix implements Iterable<Double> {
         for (int i = 0; i < rows && res; i++) {
             Vector v = getRow(i);
             Vector u = m.getRow(i);
-            res = v.equals(u);
+            res = v.equals(u, tolerance);
         }
         return res;
     }

@@ -15,7 +15,7 @@ public class Vector3 extends Vector {
     }
 
     public Vector3(Vector v) {
-        this(v.toArray());
+        this(v.get(0), v.get(1), v.get(2));
     }   
 
     public double getX() {

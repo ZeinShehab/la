@@ -33,14 +33,16 @@ public class Vector implements Iterable<Double> {
 
     /**
      * Creates a new vector from given array {@code v} while copying the given array
+     * @see org.la.factory.VectorFactory
      */
     public static Vector fromArray(double ... v) {
-        return VectorFactory.fromArray(v);
+        return new Vector(v, true);
     }
 
     /**
      * Creates a new vector from given string {@code vecString}
      * It uses strings of the format {@code [1 2 3]} where spaces seperate the elements
+     * @see org.la.factory.VectorFactory
      */
     public static Vector fromString(String vecString) {
         return VectorFactory.fromString(vecString);
@@ -48,6 +50,7 @@ public class Vector implements Iterable<Double> {
 
     /**
      * Creates a new vector of given length {@code length}
+     * @see org.la.factory.VectorFactory
      */
     public static Vector fromLength(int length) {
         return VectorFactory.fromLength(length);
@@ -55,6 +58,7 @@ public class Vector implements Iterable<Double> {
 
     /**
      * Creates a new vector of given range
+     * @see org.la.factory.VectorFactory
      */
     public static Vector fromRange(double start, double end, double step) {
         return VectorFactory.fromRange(start, end, step);
@@ -62,6 +66,7 @@ public class Vector implements Iterable<Double> {
 
     /**
      * Creates a new vector of given range with step set to 1 by default
+     * @see org.la.factory.VectorFactory
      */
     public static Vector fromRange(double start, double end) {
         return VectorFactory.fromRange(start, end);
@@ -69,6 +74,7 @@ public class Vector implements Iterable<Double> {
 
     /**
      * Creates a new vector from range with the {@code start=0} and {@code step=1}  
+     * @see org.la.factory.VectorFactory
      */
     public static Vector fromRange(int end) {
         return VectorFactory.fromRange(end);
@@ -76,6 +82,7 @@ public class Vector implements Iterable<Double> {
 
     /**
      * Creates a new vector of {@code value}s of length {@code length}
+     * @see org.la.factory.VectorFactory
      */
     public static Vector fromConstant(int length, double value) {
         return VectorFactory.fromConstant(length, value);

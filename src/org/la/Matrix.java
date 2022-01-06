@@ -34,10 +34,14 @@ public class Matrix implements Iterable<Double> {
         this.cols = arr[0].length;
     }
     /**
-     * Creates a new matrix from given string {@code matString}
-     * It uses strings of the format {@code [1 2 3; 4 5 6; 7 8 9]}
-     * where spaces represent the columns and semicolons represent the rows
-     */
+	 * Parses matrix from string of the format {@code [1 2 3; 4 5 6; 7 8 9]}
+	 * Similar to the MatLab syntax spaces represent columns and semicolons
+	 * represent rows
+	 * The square brackets {@code []} are optional
+	 * 
+	 * @param matString String following the above format
+     * @see org.la.factory.MatrixFactory
+	 */
     public static Matrix fromString(String matString) {
         return MatrixFactory.fromString(matString);
     }
@@ -46,11 +50,12 @@ public class Matrix implements Iterable<Double> {
      * Creates a new matrix from given array {@code arr} while copying the given array
      */
     public static Matrix fromArray(double[][] arr) {
-        return MatrixFactory.fromArray(arr);
+        return new Matrix(arr, true);
     } 
 
     /**
      * Creates a new matrix of {@code value}s of size {@code rows x cols}
+     * @see org.la.factory.MatrixFactory
      */
     public static Matrix fromConstant(int rows, int cols, double value) {
         return MatrixFactory.fromConstant(rows, cols, value);
@@ -58,6 +63,7 @@ public class Matrix implements Iterable<Double> {
 
     /**
      * Creates a new matrix of {@code value}s of size {@code size x size}
+     * @see org.la.factory.MatrixFactory
      */
     public static Matrix fromConstant(int size, double value) {
         return MatrixFactory.fromConstant(size, value);
@@ -65,6 +71,7 @@ public class Matrix implements Iterable<Double> {
 
     /**
      * Creates a new matrix of given size {@code rows x cols}
+     * @see org.la.factory.MatrixFactory
      */
     public static Matrix fromSize(int rows, int cols) {
         return MatrixFactory.fromSize(rows, cols);
@@ -72,6 +79,7 @@ public class Matrix implements Iterable<Double> {
 
     /**
      * Creates a new matrix of given size {@code size x size}
+     * @see org.la.factory.MatrixFactory
      */
     public static Matrix fromSize(int size) {
         return MatrixFactory.fromSize(size);
@@ -80,6 +88,7 @@ public class Matrix implements Iterable<Double> {
     /**
      * Creates a new matrix of given vector {@code v} by stacking them 
      * horizontally on top of each other
+     * @see org.la.factory.MatrixFactory
      */
     public static Matrix fromVectorsHorizontal(Vector ... v) {
         return MatrixFactory.fromVectorsHorizontal(v);
@@ -87,10 +96,19 @@ public class Matrix implements Iterable<Double> {
 
     /**
      * Creates a new matrix of given vectors {@code v} by laying them out
-     * vertically side by side.
+     * vertically side by side
+     * @see org.la.factory.MatrixFactory
      */
     public static Matrix  fromVectorsVertical(Vector ... v) {
         return MatrixFactory.fromVectorsVertical(v);
+    }
+
+    /**
+     * Creates an identitiy matrix of size {@code n x n}
+     * @see org.la.factory.MatrixFactory
+     */
+    public static Matrix eye(int n) {
+        return MatrixFactory.identity(n);
     }
 
     /**
@@ -235,13 +253,6 @@ public class Matrix implements Iterable<Double> {
      */
     public static Matrix blankOfSize(int rows, int cols) {
         return fromSize(rows, cols);
-    }
-
-    /**
-     * Creates an identitiy matrix of size {@code n x n}
-     */
-    public static Matrix eye(int n) {
-        return MatrixFactory.identity(n);
     }
 
     /**

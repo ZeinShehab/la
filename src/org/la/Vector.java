@@ -40,14 +40,14 @@ public class Vector implements Iterable<Double> {
 
     /**
      * Creates a new vector from given string {@code vecString}
-     * It uses strings of the format {@code [1 2 3]} were spaces seperate the elements
+     * It uses strings of the format {@code [1 2 3]} where spaces seperate the elements
      */
     public static Vector fromString(String vecString) {
         return VectorFactory.fromString(vecString);
     }
 
     /**
-     * Creates a new vector of given {@code length}
+     * Creates a new vector of given length {@code length}
      */
     public static Vector fromLength(int length) {
         return VectorFactory.fromLength(length);
@@ -72,6 +72,13 @@ public class Vector implements Iterable<Double> {
      */
     public static Vector fromRange(int end) {
         return VectorFactory.fromRange(end);
+    }
+
+    /**
+     * Creates a new vector of {@code value}s of length {@code length}
+     */
+    public static Vector fromConstant(int length, double value) {
+        return VectorFactory.fromConstant(length, value);
     }
 
     /** 
@@ -226,10 +233,10 @@ public class Vector implements Iterable<Double> {
     }
 
     /**
-     * Returns sum of instance vector {@code v} and {@code u}
+     * Returns difference of instance vector {@code v} and {@code u}
      * @param u a vector
      * @return v - u
-     * @see {@link #add(double)}
+     * @see {@link #add(Vector)}
      * @see {@link #negate()}
      */
     public Vector sub(Vector u) {
@@ -273,7 +280,7 @@ public class Vector implements Iterable<Double> {
     }
 
     /**
-     * Returns new vector of instance vector {@code v} multiplied/transformed by matrix {@code m} 
+     * Returns a new vector of instance vector {@code v} multiplied/transformed by matrix {@code m} 
      * @param m a square matrix
      * @return v * m
      */
@@ -462,7 +469,7 @@ public class Vector implements Iterable<Double> {
     }
 
     /**
-     * Returns conventional vector string representation of instance vector
+     * Returns conventional string representation of vector
      */
     @Override
     public String toString() {
@@ -486,6 +493,7 @@ public class Vector implements Iterable<Double> {
 
     /**
      * Checks if instance vector is equal to {@code obj} with tolerance of {@code 1.0E-6}
+     * @see org.la.Linear
      */
     @Override
     public boolean equals(Object obj) {

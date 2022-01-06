@@ -7,13 +7,12 @@ import org.la.Linear;
 
 public class MatrixFactory {
 	/**
-	 * Parses matrix from string of the format {@code [1 2 3; 4 5 6; 7 8 9]}
+	 * Creates a matrix from strings of the format {@code [1 2 3; 4 5 6; 7 8 9]}
 	 * Similar to the MatLab syntax spaces represent columns and semicolons
 	 * represent rows
 	 * The square brackets {@code []} are optional
 	 * 
 	 * @param matString String following the above format
-	 * @return 2D array representation of string as matrix
 	 */
 	public static Matrix fromString(String matString) {
 		matString = " " + matString.replace("[", "").replace("]", "");
@@ -33,10 +32,9 @@ public class MatrixFactory {
 		return res;
 	}
 
-	public static Matrix fromArray(double[][] arr) {
-		return new Matrix(arr);
-	}
-
+	/**
+     * Creates a new matrix of {@code value}s of size {@code rows x cols}
+	 */
 	public static Matrix fromConstant(int rows, int cols, double value) {
 		Matrix res = fromSize(rows, cols);
 
@@ -46,18 +44,31 @@ public class MatrixFactory {
 		return res;
 	}
 
+	/**
+     * Creates a new matrix of {@code value}s of size {@code size x size}
+	 */
 	public static Matrix fromConstant(int size, double value) {
 		return fromConstant(size, size, value);
 	}
 
+	/**
+     * Creates a new matrix of given size {@code rows x cols}
+	 */
 	public static Matrix fromSize(int rows, int cols) {
 		return new Matrix(new double[rows][cols], false);
 	}
 
+	/**
+     * Creates a new matrix of given size {@code size x size}
+	 */
 	public static Matrix fromSize(int size) {
 		return fromSize(size, size);
 	}
 
+	/**
+     * Creates a new matrix of given vector {@code v} by stacking them 
+     * horizontally on top of each other
+     */
 	public static Matrix fromVectorsHorizontal(Vector ... v) {
 		if (v.length == 0 || v[0] == null)
 			throw new IllegalArgumentException("Invalid input size");
@@ -69,6 +80,10 @@ public class MatrixFactory {
 		return res;
 	}
 
+	/**
+     * Creates a new matrix of given vectors {@code v} by laying them out
+     * vertically side by side
+     */
 	public static Matrix fromVectorsVertical(Vector ... v) {
 		if (v.length == 0 || v[0] == null)
 			throw new IllegalArgumentException("Invalid input size");
@@ -80,11 +95,14 @@ public class MatrixFactory {
 		return res;
 	}
 
+	/**
+     * Creates an identitiy matrix of size {@code n x n}
+     */
 	public static Matrix identity(int size) {
 		double[][] m = new double[size][size];
 		for (int i = 0; i < size; i++) {
 			m[i][i] = 1;
 		}
-		return fromArray(m);
+		return new Matrix(m);
 	}
 }

@@ -5,10 +5,10 @@ import org.la.Vector;
 
 
 public class Demo {
-    private static final int WIDTH      = 64;
-    private static final int HEIGHT     = 32;
-    private static final int RADIUS     = HEIGHT/4;
-    private static final int FPS        = 30;
+    private static final int    WIDTH   = 64;
+    private static final int    HEIGHT  = 32;
+    private static final int    RADIUS  = HEIGHT/4;
+    private static final int    FPS     = 30;
     private static final double GRAVITY = 200;
     private static final double DT      = 1.0/FPS;
     private static final double DAMPING = -0.75;
@@ -16,8 +16,8 @@ public class Demo {
 
     private static char[] display = new char[WIDTH * HEIGHT];
     public static void main(String[] args) throws InterruptedException {
-        Vector pos = new Vector(-RADIUS + PADDING, -RADIUS + PADDING);
-        Vector vel = new Vector(50, 1);
+        Vector pos     = new Vector(-RADIUS + PADDING, -RADIUS + PADDING);
+        Vector vel     = new Vector(50, 1);
         Vector gravity = new Vector(0, GRAVITY);
         
         boolean quit = false;
